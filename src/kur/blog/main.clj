@@ -1,4 +1,8 @@
 (ns kur.blog.main
   (:require [cprop.core :refer [load-config]]))
 
-(load-config :file "resource/config/release.edn")
+
+
+;;
+(comment
+  (load-config :file "resource/config/static-test.edn"))
