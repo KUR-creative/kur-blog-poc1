@@ -1,7 +1,8 @@
 (ns kur.blog.publisher
   (:require ;[reitit.core :as r]
    [reitit.ring :as ring]
-   [ring.adapter.jetty :refer [run-jetty]]))
+   [ring.adapter.jetty :refer [run-jetty]]
+   [ring.util.response :as resp]))
 
 ;; tmp
 (defn home [req]
@@ -10,6 +11,7 @@
 
 (defn post [req]
   (def req req)
+  #_(resp/file-response)
   {:status 200 :body "post"})
 
 (defn not-found [req]
