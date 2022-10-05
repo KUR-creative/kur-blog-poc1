@@ -1,0 +1,11 @@
+{:md-dir "test/fixture/blog-md"
+ :html-dir "test/fixture/tmp-html"
+ :port 3000
+ :fs-wait-ms 500}
+
+; md-dir      An directory to MONITOR post markdown
+; html-dir    An directory to UPDATE and PUBLISH post html
+; fs-wait-ms  MONITOR waits fs-wait-ms milliseconds
+;             after consecutive file events in md-dir and then
+;             requests UPDATER to write/update/delete posts
+; port        An port to open to clients
