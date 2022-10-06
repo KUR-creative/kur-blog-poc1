@@ -7,7 +7,12 @@
 
 (defn publishable [ctor path dir]
   (let [ret (ctor path dir)]
-    (assoc ret
-           :last-modified-millis (uf/last-modified-millis path)
-           :path path
-           :public? (public? ret))))
+    (if (:id ret)
+      (assoc ret
+             :last-modified-millis (uf/last-modified-millis path)
+             :path path
+             :public? (public? ret))
+      (throw (Exception. (format ":id = %s, id must be identifiable"
+                                 (:id ret)))))))
+
+;(defn id:publishable [])
