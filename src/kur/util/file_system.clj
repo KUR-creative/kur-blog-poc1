@@ -35,7 +35,17 @@
   ([root pred f] (->> (file-seq (io/as-file root))
                       (filter pred) (map f))))
 
+(defn paths-seq
+  "TODO: Use transducer instead? (perf)"
+  ([roots] (paths-seq roots #(.isFile %) str))
+  ([roots pred] (paths-seq roots pred str))
+  ([roots pred f] (->> (mapcat file-seq (map io/as-file roots))
+                       (filter pred) (map f))))
+
 (comment
   (path-seq "resource/res-roots/")
   (path-seq "resource/res-roots/" #(.isDirectory %))
-  (path-seq "resource/res-roots/" #(.isFile %) identity))
+  (path-seq "resource/res-roots/" #(.isFile %) identity)
+
+  (paths-seq ["resource/res-roots/flat"
+              "resource/res-roots/nested"]))
