@@ -1,6 +1,7 @@
 (ns kur.util.file-system
   (:require [babashka.fs :as fs]
-            [clojure.spec.alpha :as s]))
+            [clojure.spec.alpha :as s]
+            [clojure.java.io :as io]))
 
 ;;;
 (s/def ::file-name ;; not a root
@@ -25,3 +26,16 @@
 
 (defn last-modified-millis [path]
   (-> path fs/last-modified-time fs/file-time->millis))
+
+;;;
+(defn path-seq
+  "TODO: Use transducer instead? (perf)"
+  ([root] (path-seq root #(.isFile %) str))
+  ([root pred] (path-seq root pred str))
+  ([root pred f] (->> (file-seq (io/as-file root))
+                      (filter pred) (map f))))
+
+(comment
+  (path-seq "resource/res-roots/")
+  (path-seq "resource/res-roots/" #(.isDirectory %))
+  (path-seq "resource/res-roots/" #(.isFile %) identity))
