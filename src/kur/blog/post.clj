@@ -4,7 +4,7 @@
    [clojure.spec.alpha :as s]
    [clojure.spec.gen.alpha :as sg]
    [clojure.string :as str]
-   [kur.blog.publishable :refer [Publishable]]
+   [kur.blog.publishable :refer [Publishable] :as p]
    [kur.util.generator :refer [string-from-regexes]]
    [kur.util.regex :refer [hangul* alphanumeric*]]
    [kur.util.string :refer [digit?]]
@@ -16,7 +16,11 @@
   Publishable
   (response [this]
     (prn this) ; 불필요한 의존성을 피하기 위해 html을 직접 만들지는 않는다.
-    (resp/file-response id)))
+    (resp/file-response id))
+  (public? [this]
+    (if (contains? this :public?)
+      (:public? this)
+      (= "+" (:meta-str this)))))
 
 ;;; Post id parts
 (s/def ::author
@@ -85,8 +89,7 @@
                                               meta)))))
 
 (defn post [path html-dir]
-  (-> path
-      fs/file-name str fname->parts
+  (-> path fs/file-name str fname->parts
       (assoc :html-dir html-dir)))
 
 #_(comment
@@ -183,7 +186,14 @@
       (= (map->Post parts) (fname->parts (parts->fname parts)))))
   (fname-parts-roundtrip-test)
 
+  [(assert (= true  (p/public? (map->Post {:public? true}))))
+   (assert (= false (p/public? (map->Post {:public? false}))))
+   (assert (= false (p/public? (map->Post {}))))
+   (assert (= true  (p/public? (map->Post {:meta-str "+"}))))
+   (assert (= false (p/public? (map->Post {:meta-str "-"}))))]
+
   (post "asd/edsdf/A7001010900.md" 2))
+
 #_(str/join " " ;; To know used characters
             (->> (fs/list-dir "/home/dev/outer-brain/thinks/")
                  (map fs/file-name) (map set)
