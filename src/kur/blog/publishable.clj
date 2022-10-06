@@ -6,5 +6,8 @@
   (public? [_]))
 
 (defn publishable [ctor path dir]
-  (assoc (ctor path dir)
-         :last-modified-millis (uf/last-modified-millis path)))
+  (let [ret (ctor path dir)]
+    (assoc ret
+           :last-modified-millis (uf/last-modified-millis path)
+           :path path
+           :public? (public? ret))))

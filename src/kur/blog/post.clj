@@ -17,10 +17,7 @@
   (response [this]
     (prn this) ; 불필요한 의존성을 피하기 위해 html을 직접 만들지는 않는다.
     (resp/file-response id))
-  (public? [this]
-    (if (contains? this :public?)
-      (:public? this)
-      (= "+" (:meta-str this)))))
+  (public? [this] (= "+" (:meta-str this))))
 
 ;;; Post id parts
 (s/def ::author

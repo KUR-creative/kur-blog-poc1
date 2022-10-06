@@ -6,6 +6,6 @@
 (defrecord Resource [id resource-dir]
   Publishable
   (response [this] (resp/file-response id))
-  (public? [this] (:public? this)))
+  (public? [this] true))
 
 (def resource ->Resource) ; path = id
