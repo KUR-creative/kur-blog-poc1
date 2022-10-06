@@ -7,8 +7,11 @@
 
 (defn state ; Remove business logic using multimethod?
   "Create state"
-  [{:keys [md-dir html-dir resource-root-dirs] :as config}]
-  (merge (pub/id:publishable post/post md-dir "test/fixture/tmp-html/")))
+  [{:keys [md-dir html-dir resource-root-dirs]}]
+  (apply merge
+         (pub/id:publishable post/post md-dir html-dir)
+         (map #(pub/id:publishable resource/resource %1 %2)
+              resource-root-dirs resource-root-dirs)))
 
 ;;
 (comment

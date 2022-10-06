@@ -1,6 +1,7 @@
 {:md-dir "test/fixture/blog-md"
  :html-dir "test/fixture/tmp-html"
- :resource-root-dirs ["resource/res-roots/nested"]
+ :resource-root-dirs ["resource/res-roots/flat/"
+                      "resource/res-roots/nested/1/2"]
  :port 3000
  :fs-wait-ms 500}
 
