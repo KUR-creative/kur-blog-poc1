@@ -1,9 +1,11 @@
 (ns kur.blog.publishable
-  (:require [kur.util.file-system :as uf]))
+  (:require [kur.util.file-system :as uf]
+            [clojure.core :as core]))
 
 (defprotocol Publishable
   (response [_])
-  (public? [_]))
+  (public? [_])
+  (update! [_ state]))
 
 (defn publishable [ctor path dir]
   (let [ret (ctor path dir)]

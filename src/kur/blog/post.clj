@@ -9,15 +9,27 @@
    [kur.util.regex :refer [hangul* alphanumeric*]]
    [kur.util.string :refer [digit?]]
    [kur.util.time :refer [time-format]]
+   [kur.util.file-system :as uf]
    [medley.core :refer [assoc-some]]
    [ring.util.response :as resp]))
+
+(defn html-file-name [post] ; policy
+  (str (:id post) ".html"))
+(defn html-file-path [html-path post]
+  (str (fs/path html-path (html-file-name post))))
 
 (defrecord Post [id meta-str title html-dir]
   Publishable
   (response [this]
     (prn this) ; 불필요한 의존성을 피하기 위해 html을 직접 만들지는 않는다.
     (resp/file-response id))
-  (public? [this] (= "+" (:meta-str this))))
+  (public? [this] (= "+" (:meta-str this)))
+  (update! [this state]
+    (let [html-path (html-file-path html-dir this)]
+      (spit html-path id)
+      (assoc this
+             :html-path html-path
+             :last-modified-millis (uf/last-modified-millis (:path this))))))
 
 ;;; Post id parts
 (s/def ::author
@@ -140,14 +152,7 @@
 
     #_(id:file-info "test/fixture/blog-v1-md" "test/fixture/blog-v1-html")
 
-    #_(id:file-info "test/fixture/blog-v1-md" "test/fixture/blog-v1-md")
-
-
-    (defn html-file-name [file-info] ; policy
-      (str (::id file-info) ".html"))
-
-    (defn html-file-path [parent-path file-info]
-      (str (fs/path parent-path (html-file-name file-info)))))
+    #_(id:file-info "test/fixture/blog-v1-md" "test/fixture/blog-v1-md"))
 
 ;;
 (comment
