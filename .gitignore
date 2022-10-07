@@ -8,7 +8,7 @@
 out/*
 !out/.gitkeep
 
-test/fixture/post-md/*
-!test/fixture/post-md/.gitkeep
-test/fixture/post-html/*
-!test/fixture/post-html/.gitkeep
+test/fixture/tmp-md/*
+!test/fixture/tmp-md/.gitkeep
+test/fixture/tmp-html/*
+!test/fixture/tmp-html/.gitkeep
