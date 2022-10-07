@@ -5,8 +5,8 @@
             [kur.util.file-system :as uf]
             [babashka.fs :as fs]))
 
-(defn state ; Remove business logic using multimethod?
-  "Create state"
+(defn state
+  "Create state (NOTE: This is business logic!)"
   [{:keys [md-dir html-dir resource-root-dirs]}]
   (apply merge
          (pub/id:publishable post/post md-dir html-dir)

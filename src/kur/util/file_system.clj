@@ -29,14 +29,20 @@
 
 ;;;
 (defn path-seq
-  "TODO: Use transducer instead? (perf)"
+  "List all the file paths in root, recursively. 
+   pred to filter the results, f to map the filtereds. 
+   default pred: isFile, f: str"
+  ;TODO: Use transducer instead? (perf)
   ([root] (path-seq root #(.isFile %) str))
   ([root pred] (path-seq root pred str))
   ([root pred f] (->> (file-seq (io/as-file root))
                       (filter pred) (map f))))
 
 (defn paths-seq
-  "TODO: Use transducer instead? (perf)"
+  "List all the file paths in root*s* recursively, then cat the results.
+   pred to filter the results, f to map the filtereds. 
+   default pred: isFile, f: str"
+  ;TODO: Use transducer instead? (perf)
   ([roots] (paths-seq roots #(.isFile %) str))
   ([roots pred] (paths-seq roots pred str))
   ([roots pred f] (->> (mapcat file-seq (map io/as-file roots))

@@ -1,8 +1,9 @@
 (ns kur.blog.main
-  (:require [cprop.core :refer [load-config]]))
-
+  (:require [cprop.core :refer [load-config]]
+            [kur.blog.state :as state]))
 
 
 ;;
 (comment
-  (load-config :file "resource/config/static-test.edn"))
+  (def cfg (load-config :file "resource/config/static-test.edn"))
+  (state/state cfg))
