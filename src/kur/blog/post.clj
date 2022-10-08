@@ -11,7 +11,7 @@
    [kur.util.time :refer [time-format]]
    [kur.util.file-system :as uf]
    [medley.core :refer [assoc-some]]
-   [ring.util.response :as resp]))
+   [kur.blog.page.post :as page-post]))
 
 (defn html-file-name [post] ; policy
   (str (:id post) ".html"))
@@ -21,15 +21,15 @@
 (defrecord Post [id meta-str title html-dir]
   Publishable
   (out-form [this]
-    (prn this) ; 불필요한 의존성을 피하기 위해 html을 직접 만들지는 않는다.
     (:html-path this))
   (public? [this] (= "+" (:meta-str this)))
-  (update! [this state]
-    (let [html-path (html-file-path html-dir this)]
-      (spit html-path id)
+  (update! [this state] ; NOTE: state는 이미 먼저 upd 되어 있음을 가정
+    (let [md-path (:path this)
+          html-path (html-file-path html-dir this)]
+      (->> md-path slurp (page-post/html nil) (spit html-path))
       (assoc this
              :html-path html-path
-             :last-modified-millis (uf/last-modified-millis (:path this))))))
+             :last-modified-millis (uf/last-modified-millis md-path)))))
 
 ;;; Post id parts
 (s/def ::author

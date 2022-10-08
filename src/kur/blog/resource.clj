@@ -5,7 +5,7 @@
 
 (defrecord Resource [id resource-dir]
   Publishable
-  (out-form [this] id)
+  (out-form [this] id) ; id = path
   (public? [this] true)
   (update! [this _]
     (assoc this
