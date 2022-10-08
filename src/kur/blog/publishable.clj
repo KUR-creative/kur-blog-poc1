@@ -3,7 +3,7 @@
             [clojure.core :as core]))
 
 (defprotocol Publishable
-  (response [_])
+  (out-form [_])
   (public? [_])
   (update! [_ state]))
 
