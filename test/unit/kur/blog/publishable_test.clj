@@ -1,4 +1,4 @@
-(ns unit.kur.blog.publishable-test
+(ns kur.blog.publishable-test
   (:require
    [clojure.test :refer [is deftest run-tests]]
    [kur.blog.publishable :as pub]
