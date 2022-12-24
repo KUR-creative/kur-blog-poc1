@@ -34,7 +34,9 @@
 (defn publisher [state]
   (ring/ring-handler
    (ring/router [["/" {:get home}]
-                 ["/*" {:get (publish state)}]])
+                 ["/home" {:get home}]
+            ;; id = kur0000000000, NOTE: 저자가 kur임을 가정 
+                 ["/kur*" {:get (publish state)}]])
    (ring/routes
     (ring/redirect-trailing-slash-handler {:method :strip})
     not-found)))
@@ -50,8 +52,10 @@
     (ring/router
      [["/" {:get home}]
       ["/home" {:get home}]
-      ["/kur*" {:get post}]; id = kur0000000000, NOTE: 저자가 kur임을 가정 
-      ["/resource/*" {:get post}]]))
+      ["/index.html" {:get home}]
+      ["/about" {:get (fn [req] {:status 200 :body "about"})}]
+      ["/kur*" {:get (fn [req] {:status 200 :body "post"})}]
+      ["/resource/*" {:get (fn [req] {:status 200 :body "res"})}]]))
 
   (def app
     (ring/ring-handler
@@ -60,7 +64,14 @@
       (ring/redirect-trailing-slash-handler {:method :strip})
       not-found)))
 
-  (app {:request-method :get :uri "/kur1"})
+  (app {:request-method :get :uri "nf"})
+  (app {:request-method :get :uri "/"})
+  (app {:request-method :get :uri "/home"})
+  (app {:request-method :get :uri "/index.html"})
+  (app {:request-method :get :uri "/about"})
+  (app {:request-method :get :uri "/kur1234"})
+  (app {:request-method :get :uri "/kur12"})
+  (app {:request-method :get :uri "/resource/asdf"})
 
 ;;
   )
