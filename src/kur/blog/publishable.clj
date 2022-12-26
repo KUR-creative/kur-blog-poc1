@@ -29,9 +29,8 @@
    inps is seq of inp or nil. inp=nil means no need to inp to create pub.
    out-dir is arg of publishable ctor."
   [ctor inps-or-nil out-dir]
-  (let [pubs (if inps-or-nil
-               (mapv #(publishable ctor % out-dir) inps-or-nil)
-               [(publishable ctor inps-or-nil out-dir)])
+  (let [inps (if (nil? inps-or-nil) [nil] inps-or-nil)
+        pubs (mapv #(publishable ctor % out-dir) inps)
         ret-m (zipmap (map :id pubs) pubs)]
     (assert (= (count pubs) (count ret-m))
             (format "merged result has same N of pubs, but %d != %d"

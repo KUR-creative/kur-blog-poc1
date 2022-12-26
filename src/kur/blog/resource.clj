@@ -11,5 +11,4 @@
     (assoc this
            :last-modified-millis (uf/last-modified-millis (:path this)))))
 
-
 (def resource ->Resource) ; path = id

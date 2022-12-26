@@ -23,7 +23,8 @@
                       "test/fixture/blog-md/" "test/fixture/tmp-html/")
   (map (fn [root-dir resource-dir]
          (pub/id:publishable resource/resource root-dir resource-dir))
-       ["resource/res-roots/flat" "resource/res-roots/nested"]
+       [(uf/path-seq "resource/res-roots/flat")
+        (uf/path-seq "resource/res-roots/nested")]
        [:flat :nested])
 
   (pub/publishable home/home nil "test/fixture/tmp-html/")
