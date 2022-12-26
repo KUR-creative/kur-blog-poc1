@@ -26,9 +26,12 @@
 
 (defn id:publishable
   "Cretate Publishables and Return mappings id to pub.
-   inps is seq of inp. out-dir is for publishable ctor wrapper."
-  [ctor inps out-dir]
-  (let [pubs (mapv #(publishable ctor % out-dir) inps)
+   inps is seq of inp or nil. inp=nil means no need to inp to create pub.
+   out-dir is arg of publishable ctor."
+  [ctor inps-or-nil out-dir]
+  (let [pubs (if inps-or-nil
+               (mapv #(publishable ctor % out-dir) inps-or-nil)
+               [(publishable ctor inps-or-nil out-dir)])
         ret-m (zipmap (map :id pubs) pubs)]
     (assert (= (count pubs) (count ret-m))
             (format "merged result has same N of pubs, but %d != %d"
