@@ -25,10 +25,12 @@
       ret)))
 
 (defn id:publishable
-  ([ctor root dir]
-   (let [pubs (mapv #(publishable ctor % dir) (uf/path-seq root))
-         ret-m (zipmap (map :id pubs) pubs)]
-     (assert (= (count pubs) (count ret-m))
-             (format "merged result has same N of pubs, but %d != %d"
-                     (count pubs) (count ret-m)))
-     ret-m)))
+  "Cretate Publishables and Return mappings id to pub.
+   inps is seq of inp. out-dir is for publishable ctor wrapper."
+  [ctor inps out-dir]
+  (let [pubs (mapv #(publishable ctor % out-dir) inps)
+        ret-m (zipmap (map :id pubs) pubs)]
+    (assert (= (count pubs) (count ret-m))
+            (format "merged result has same N of pubs, but %d != %d"
+                    (count pubs) (count ret-m)))
+    ret-m))
