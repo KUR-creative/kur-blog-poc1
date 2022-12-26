@@ -14,5 +14,6 @@
     ; page-home/html this ..?
     (assoc this :html-path (html-file-path html-dir))))
 
-(defn home [_ html-dir] (->Home "home" html-dir))
-;(kur.blog.publishable/update! (->Home "home" "test"))
+(defn home
+  "id = home"
+  [_ html-dir] (->Home "home" html-dir))
