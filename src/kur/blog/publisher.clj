@@ -34,9 +34,10 @@
 (defn publisher [state]
   (ring/ring-handler
    (ring/router [["/" {:get home}]
-                 ["/home" {:get home}]
+                 ;["/home" {:get home}]
             ;; id = kur0000000000, NOTE: 저자가 kur임을 가정 
-                 ["/kur*" {:get (publish state)}]])
+                 ;["/kur*" {:get (publish state)}]
+                 ["/*" {:get (publish state)}]])
    (ring/routes
     (ring/redirect-trailing-slash-handler {:method :strip})
     not-found)))
