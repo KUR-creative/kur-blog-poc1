@@ -42,8 +42,8 @@
     (ring/redirect-trailing-slash-handler {:method :strip})
     not-found)))
 
-(defn start! [handler {:keys [port]}]
-  (run-jetty handler {:port port :join? false}))
+(defn start! [handler cfg]
+  (run-jetty handler cfg))
 
 (defn stop! [jetty-server] (.stop jetty-server))
 

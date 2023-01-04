@@ -3,7 +3,6 @@
  :resource-root-dirs ["resource/res-roots/flat/"
                       "resource/res-roots/nested/1/2"]
  :port 3000
- :join? false  ;; for test
  :fs-wait-ms 500}
 
 ; md-dir      An directory to MONITOR post markdown
