@@ -5,14 +5,20 @@
             [kur.blog.publisher :as publisher])
   (:gen-class))
 
-(defn -main [_]
-  (let [cfg (load-config :file "resource/config/static-test.edn")
-        s (state/state cfg)
+(def app
+  (let [cfg-path "resource/config/static-test.edn"
+        s (state/state (load-config :file cfg-path))
         state (atom (update-vals s #(pub/update! % s)))
-        handler (publisher/publisher state)]
-    (publisher/start! handler cfg)))
+        ;; 현재 pub update!에 순서가 없어도 되서 문제되지 않음
+        ;; 만일 update!에 순서가 필요하다면 update-vals말고 직접 짜야 함
+        ]
+    (publisher/publisher state)))
 
-#_(def pp (app nil));
+(defn -main [_]
+  (publisher/start! app
+                    (load-config :file "resource/config/static-test.edn")))
+
+#_(def pp (-main nil));
 #_(publisher/stop! pp)
 
 ;;
