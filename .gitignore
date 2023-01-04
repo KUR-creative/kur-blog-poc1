@@ -4,6 +4,8 @@
 .lsp
 .calva
 
+target/*
+
 # Empty directories for various testing
 out/*
 !out/.gitkeep

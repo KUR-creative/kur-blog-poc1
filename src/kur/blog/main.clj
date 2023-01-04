@@ -2,8 +2,18 @@
   (:require [cprop.core :refer [load-config]]
             [kur.blog.state :as state]
             [kur.blog.publishable :as pub]
-            [kur.blog.publisher :as publisher]))
+            [kur.blog.publisher :as publisher])
+  (:gen-class))
 
+(defn -main [_]
+  (let [cfg (load-config :file "resource/config/static-test.edn")
+        s (state/state cfg)
+        state (atom (update-vals s #(pub/update! % s)))
+        handler (publisher/publisher state)]
+    (publisher/start! handler cfg)))
+
+#_(def pp (app nil));
+#_(publisher/stop! pp)
 
 ;;
 (comment
