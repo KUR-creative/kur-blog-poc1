@@ -17,6 +17,14 @@
                                    (uf/path-seq %1)
                                    %2)
               resource-root-dirs resource-root-dirs)))
+
+(defn update!
+  "pub/update! could do side-effect"
+  [state]
+  ;; 현재 pub update!에 순서가 없어도 되서 문제되지 않음
+  ;; 만일 update!에 순서가 필요하다면 update-vals말고 직접 짜야 함
+  (update-vals state #(pub/update! % state)))
+
 ;;
 (comment
   (pub/id:publishable post/post
