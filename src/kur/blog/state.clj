@@ -18,11 +18,33 @@
                                    %2)
               resource-root-dirs resource-root-dirs)))
 
+(defn happened
+  "What happend in info(values of state)?"
+  [old-info new-info]
+  {:pre [(or old-info new-info)]}
+  (cond (nil? old-info)       ::create
+        (nil? new-info)       ::delete
+        (= old-info new-info) ::as-is
+        :else                 ::update))
+
+(defn happeneds [old-s new-s]
+  (let [all-ks (apply conj (set (keys old-s)) (keys new-s))]
+    (zipmap all-ks
+            (map happened (map old-s all-ks) (map new-s all-ks)))))
+
+(defn next-state [old new happeneds]
+  (let [deleted-keys (->> happeneds
+                          (filter #(= (val %) ::delete))
+                          (map #(key %)))]
+    (apply dissoc (merge old new) deleted-keys)))
+
+
 (defn update!
   "pub/update! could do side-effect"
   [state]
   ;; 현재 pub update!에 순서가 없어도 되서 문제되지 않음
   ;; 만일 update!에 순서가 필요하다면 update-vals말고 직접 짜야 함
+  ;(let [old-s @state, new-s ])
   (update-vals state #(pub/update! % state)))
 
 ;;

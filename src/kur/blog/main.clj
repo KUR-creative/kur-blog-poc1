@@ -1,15 +1,31 @@
 (ns kur.blog.main
   (:require [cprop.core :refer [load-config]]
-            [kur.blog.state :as state]
-            [kur.blog.publishable :as pub]
-            [kur.blog.publisher :as publisher])
+            [kur.blog.monitor :as monitor]
+            [kur.blog.state :as state])
   (:gen-class))
 
-(def state (atom nil))
-(defn init [_]
-  (reset! state (-> (load-config :file
-                                 "resource/config/static-test.edn")
-                    state/state state/update!)))
+(defn -main [& config-path]
+  (let [cfg-path (if config-path
+                   (first config-path)
+                   "resource/config/static-test.edn")
+        cfg (load-config :file cfg-path)
+        s (state/state cfg)
+        state (atom (state/update! s))]
+    (def state state)
+    (monitor/monitor #(swap! state state/update!)
+                     (:fs-wait-ms cfg)
+                     (:md-dir cfg))))
+
+(comment
+  (def m (-main))
+  (def m (monitor/stop! m)))
+
+
+#_(def state (atom nil))
+#_(defn init [_]
+    (reset! state (-> (load-config :file
+                                   "resource/config/static-test.edn")
+                      state/state state/update!)))
 #_(init nil)
 
 #_(def app (publisher/publisher state)) ;; the handler
